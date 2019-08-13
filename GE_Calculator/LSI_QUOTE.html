@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>LSI_QUOTE</title>
+</head>
+<body>
+	<style type="text/css">
+		 .sel{
+			   display: inline-block;
+			   width: 100%;
+			   margin-left: auto;
+			   margin-right: 0;
+			   right: 0 !important;
+			}
+			.bullet{
+			   margin-top: 0px; 
+			   margin-bottom: 0px; 
+			   text-indent: 2%; 
+			   color: #9ac0dz; 
+			   font-family:courier;
+			   font-size: 15px
+			}
+	</style>
+	<div style="padding:2%">
+		<form action="" id="mainForm" onsubmit="return false;">
+
+			<div id="lessonView" style="width: 100%;">
+				<div style="display: inline-block;">
+					<label>Course:</label>
+				</div>
+				<div class="sel">
+					<select id="lesson" class="sel" onchange="setLesson()">
+						<option value="None">Select course (Monday to Friday)</option>
+						<option value="GE">Full-Time General English (Summer: £295 / Normal: £270) 22.5hrs</option>
+						<option value="IELTS">IELTS preparation (Summer: £295 / Normal: £270) 22.5hrs</option>
+						<option value="B2">B2 First for Schools/FCE Preparation (Summer: £295 / Normal: £270) 22.5hrs</option>
+						<option value="C1">C1 Advanced/CAE Preparation (Summer: £295 / Normal: £270) 22.5hrs</option>
+						<option value="C2">C2 Proficiency/CPE Preparation (Summer: £295 / Normal: £270) 22.5hrs</option>
+					</select>
+				</div>
+			</div>
+
+			<div id="examView" hidden="true">
+				<br>
+				<div class="row">
+					<div class="large-12 columns">
+						<span>
+							<input id="exam" type="checkbox" onchange="setExamOption()">
+							<label id="examLabel">Cambrige Exam</label>
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<div id="datesView" style="width: 100%;" hidden="true">
+				<br>
+				<div style="display: inline-block; width: 40%; margin-right: 5vw;">
+					<div style="display: inline-block;">
+						<label>Starting date:</label>
+					</div>
+					<div style="display: inline-block; width: 60%;">
+						<input type="date" id="startingDate" onkeydown="return false" onchange="setStartDate()">
+					</div>
+				</div>
+				<div style="display: inline-block; width: 40%;">
+					<div style="display: inline-block;">
+						<label>Ending date:</label>
+					</div>
+					<div style="display: inline-block; width: 60%">
+						<input type="date" id="endingDate" onkeydown="return false" onchange="setEndDate()">
+					</div>
+				</div>
+			</div>
+			
+			<div id="accommodationView" style="width: 100%;" hidden="true">
+				<br>
+				<div style="display: inline-block; " >
+					<label >Accommodation:</label>
+				</div>
+				<div class="sel">
+					<select id="accomodation" onchange="setAccommodation()">
+						<option value="None">Accommodation option (Monday to Saturday)</option>
+						<option value="Homestay">Homestay (Summer: £165 / Normal: £155)</option>
+						<option value="Full-En">Self-Catering / Full-En suite room (Summer: £175 / Normal: £165)</option>
+						<option value="Superior">Self-Catering / Superior Room (with private shower and wash basin) (Summer: £165 / Normal: £155)</option>
+					</select>
+				</div>
+			</div>
+
+			<div id="optionForm" hidden="true">
+				<div id="airportView" style="width: 100%;">
+					<div style="display: inline-block;">
+						<label >Airport Taxi Transfer:</label>
+					</div>
+					<div class="sel">
+						<select id="airport" onchange="setTaxiExtra()">
+							<option value="None">No need</option>
+							<option value="HG">Heathrow or Gatwick Airport</option>
+							<option value="SE">Southampton Eastleigh Airport</option>
+							<option value="L">Luton Airport</option>
+							<option value="S">Stansted Airport</option>
+						</select>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="large-12 columns">
+						<span>
+							<input id="arrival" name="taxiExtra" type="radio" value="arrival" onclick="computeTaxiExtra()" disabled>
+							<label id="arrivalLabel">On arrival</label>
+						</span>
+						<span>
+							<input id="departure" name="taxiExtra" type="radio" value="departure"  onchange="computeTaxiExtra()" disabled>
+							<label id="departureLabel">On departure</label>
+						</span>
+						<span>
+							<input id="both" name="taxiExtra" type="radio" value="departure" onchange="computeTaxiExtra()" disabled>
+							<label id="bothLabel">On arrival and departure</label>
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<div id="controlPart">
+				<br>
+				<span><h2 id="totalPrice" style="color: #005ca2; font-weight: bold; margin-bottom: 0px;">Total: £80</h2></span>
+				<h5 id="fee" class="bullet">- Registration fee: £80</h5>
+				<h5 id="lessonReview" class="bullet"></h5>
+				<h5 id="examFee" class="bullet"></h5>
+				<h5 id="accomodationReview" class="bullet"></h5>
+				<h5 id="extraReview" class="bullet"></h5>
+			</div>
+
+		</form>
+	</div>
+	<script src="script.js"></script>
+</body>
+</html>
