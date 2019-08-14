@@ -18,6 +18,26 @@
 	lesson_price_non_summer["C1"]=270;
 	lesson_price_non_summer["C2"]=270;
 
+	var lesson_prices = {
+		"2019": {"None": {"summer": 0, "normal": 0},
+				 "GE": {"summer": 295, "normal": 270},
+				 "IELTS": {"summer": 295, "normal": 270},
+				 "B2": {"summer": 295, "normal": 270},
+				 "C1": {"summer": 295, "normal": 270},
+				 "C2": {"summer": 295, "normal": 270}},
+
+		"2020": {"None": {"summer": 0, "normal": 0},
+				 "GE": {"summer": 300, "normal": 250},
+				 "IELTS": {"summer": 300, "normal": 250},
+				 "B2": {"summer": 300, "normal": 250},
+				 "C1": {"summer": 300, "normal": 250},
+				 "C2": {"summer": 300, "normal": 250}}
+	};
+
+	console.log(lesson_prices["2020"]["C1"]["summer"])
+
+
+
 	//Accommodation price
 	var accommo_price_summer= new Array(); //accommodation price list for summer
 	accommo_price_summer["None"]=0;
@@ -30,6 +50,18 @@
 	accommo_price_non_summer["Homestay"]=155;
 	accommo_price_non_summer["Full-En"]=165;
 	accommo_price_non_summer["Superior"]=155;
+
+	var accommodation_prices = {
+		"2019": {"None": {"summer": 0, "normal": 0},
+				 "Homestay": {"summer": 165, "normal": 155},
+				 "Full-En": {"summer": 175, "normal": 165},
+				 "Superior": {"summer": 165, "normal": 155}},
+
+		"2020": {"None": {"summer": 0, "normal": 0},
+				 "Homestay": {"summer": 200, "normal": 120},
+				 "Full-En": {"summer": 200, "normal": 150},
+				 "Superior": {"summer": 300, "normal": 200}}
+	};
 
 	//Taxi transfert price 
 	var taxi_transfert_arrival= new Array(); //Lesson price list for summer
@@ -58,10 +90,26 @@
 	exam_Fee["C1"] = 160;
 	exam_Fee["C2"] = 165;
 
+	var fixedFees = 80;
+	document.getElementById('totalPrice').innerHTML = "Total: £"+fixedFees; //Change the value printed in the view
+	document.getElementById('fee').innerHTML = "- Registration fee: £"+fixedFees; //Change the value printed in the view
+
+
 	var theForm = document.forms["mainForm"];
 	setCalendar();
 	var startDate = 0;
 	var endDate = 0;
+
+	var summerDates = {
+		"2019": {"start": new Date("2019-06-10T00:00:00Z"), "end":new Date("2019-08-30T00:00:00Z")},
+		"2020": {"start": new Date("2020-06-08T00:00:00Z"), "end":new Date("2020-09-01T00:00:00Z")}
+	};
+
+	for (var key in summerDates) {
+    	summerDates[key]["start"].setHours(00,00,00)
+    	summerDates[key]["end"].setHours(00,00,00)
+	}
+
 	var summerStartDate = new Date("2019-06-10T00:00:00Z") //Change this to set a new starting date for summer price 
 	var summerEndDate = new Date("2019-08-30T00:00:00Z") //Change this to set a new ending date for summer price 
 	summerStartDate.setHours(00,00,00)
@@ -73,6 +121,12 @@
 	var summerLessonsPrice = 0;
 	var normalAccommodationPrice = 0;
 	var summerAccommodationPrice = 0;
+
+	var accommodationTotal = 0;
+	var lessonTotal = 0;
+	var theLessons = "None";
+	var theAccomodation = "None";
+
 
 	var optionPrice = 0;
 	var totalToPrint = 0;
@@ -86,28 +140,35 @@
 			today = getNextMonday(today)
 		}
 		var dd = String(today.getDate()).padStart(2, '0');
-			var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-			var yyyy = today.getFullYear();
-			var formatDate = yyyy + '-' + mm + '-' + dd ;
-			theForm.elements["startingDate"].min = formatDate //Disable choice of the date before
-			today = getNextFriday(today)
+				var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+				var yyyy = today.getFullYear();
+				var formatDate = yyyy + '-' + mm + '-' + dd ;
+				theForm.elements["startingDate"].min = formatDate //Disable choice of the date before
+				today = getNextFriday(today)
 
-			dd = String(today.getDate()).padStart(2, '0');
-			mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-			yyyy = today.getFullYear();
-			formatDate = yyyy + '-' + mm + '-' + dd ;
-			theForm.elements["endingDate"].min = formatDate //Disable choice of the date before
-	}
+				dd = String(today.getDate()).padStart(2, '0');
+				mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+				yyyy = today.getFullYear();
+				formatDate = yyyy + '-' + mm + '-' + dd ;
+				theForm.elements["endingDate"].min = formatDate //Disable choice of the date before
+		}
 
-	function computeTotal(){
-		totalToPrint = 80+(summerWeeksNumber*summerLessonsPrice)+(normalWeeksNumber*normalLessonsPrice)+(summerWeeksNumber*summerAccommodationPrice)+(normalWeeksNumber*normalAccommodationPrice)+optionPrice+examOption;
-	    document.getElementById('totalPrice').innerHTML = "Total: £"+totalToPrint; //Change the value printed in the view
+		function computeTotal(){
+			totalToPrint = fixedFees+(summerWeeksNumber*summerLessonsPrice)+(normalWeeksNumber*normalLessonsPrice)+(summerWeeksNumber*summerAccommodationPrice)+(normalWeeksNumber*normalAccommodationPrice)+optionPrice+examOption;
+	    	document.getElementById('totalPrice').innerHTML = "Total: £"+totalToPrint; //Change the value printed in the view
 	}
 	
 	function setLesson(){
 		var selectedLesson = theForm.elements["lesson"];
+
+
+		theLessons = theForm.elements["lesson"]
 		summerLessonsPrice = lesson_price_summer[selectedLesson.value];
 		normalLessonsPrice = lesson_price_non_summer[selectedLesson.value];
+
+
+
+
 		if(theForm.elements["lesson"].value === "B2" || theForm.elements["lesson"].value === "C1" || theForm.elements["lesson"].value === "C2"){
 			document.getElementById('examView').hidden = false
 			document.getElementById('examLabel').innerHTML = "Cambridge Exam (£"+exam_Fee[theForm.elements["lesson"].value]+")";
@@ -194,9 +255,13 @@
 
 	function setAccommodation(){
 		var selectedAcco = theForm.elements["accomodation"];
+
+		theAccomodation = theForm.elements["accomodation"];
 		summerAccommodationPrice = accommo_price_summer[selectedAcco.value];
 		normalAccommodationPrice = accommo_price_non_summer[selectedAcco.value];
-		if(theForm.elements["accomodation"].value !== "None"){
+
+
+		if(theForm.elements["accomodation"].value !== "None"){0
 			document.getElementById("optionForm").hidden = false
 			if(normalWeeksNumber > 0 || summerWeeksNumber > 0){
 				var value = (summerWeeksNumber*summerAccommodationPrice)+(normalWeeksNumber*normalAccommodationPrice);
